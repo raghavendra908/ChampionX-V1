@@ -1,0 +1,16 @@
+{
+  "name": "championx-server",
+  "version": "1.0.0",
+  "description": "Backend for ChampionX",
+  "main": "server.js",
+  "type": "module",
+"scripts": {
+  "dev": "node server/server.js"
+},
+
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

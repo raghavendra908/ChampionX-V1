@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChampionX — Sports Championship Management</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- ✅ LINK CSS -->
+<link rel="stylesheet" href="/public/css/style.css">
+</head>
+
+<body>
+    
+<!-- ======================== LOGIN ======================== -->
+<div id="login-screen">
+  <div class="login-bg-lines"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon">🏆</div>
+      <h1>CHAMPION<span>X</span></h1>
+      <p>Sports Championship Management System</p>
+    </div>
+    <div class="role-tabs" style="flex-wrap:wrap">
+      <div class="role-tab active" onclick="selectRole(this,'Admin')">⚡ Admin</div>
+      <div class="role-tab" onclick="selectRole(this,'Federation')">🏅 Federation</div>
+      <div class="role-tab" onclick="selectRole(this,'Organizer')">📋 Organizer</div>
+      <div class="role-tab" onclick="selectRole(this,'Athlete')">🥋 Athlete</div>
+      <div class="role-tab" onclick="selectRole(this,'Referee')">🟨 Referee</div>
+      <div class="role-tab" onclick="selectRole(this,'Coach')">🎯 Coach</div>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="login-email" placeholder="admin@championx.com" value="admin@championx.com">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••" value="password123">
+    </div>
+    <button class="btn-primary" onclick="doLogin()">🔓 Sign In to Dashboard</button>
+    <p class="demo-hint">Demo mode — click <span onclick="doLogin()">Sign In</span> to explore all modules</p>
+  </div>
+</div>
+
+<!-- ======================== APP ======================== -->
+<div id="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="logo-icon">🏆</div>
+        <h2>CHAMPION<span>X</span></h2>
+      </div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar">RC</div>
+      <div class="user-info">
+        <p id="sidebar-name">Raghavendra</p>
+        <span id="sidebar-role">Administrator</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Overview</div>
+        <div class="nav-item active" onclick="navigate(this,'dashboard')"><span class="nav-icon">📊</span> Dashboard</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Core Modules</div>
+        <div class="nav-item" onclick="navigate(this,'users')"><span class="nav-icon">👥</span> User Management</div>
+        <div class="nav-item" onclick="navigate(this,'championships')"><span class="nav-icon">🏆</span> Championships</div>
+        <div class="nav-item" onclick="navigate(this,'categories')"><span class="nav-icon">📂</span> Categories</div>
+        <div class="nav-item" onclick="navigate(this,'athletes')"><span class="nav-icon">🥋</span> Athletes</div>
+        <div class="nav-item" onclick="navigate(this,'referees')"><span class="nav-icon">🟨</span> Referees</div>
+        <div class="nav-item" onclick="navigate(this,'coaches')"><span class="nav-icon">🎯</span> Coaches</div>
+        <div class="nav-item" onclick="navigate(this,'fixtures')"><span class="nav-icon">⚔️</span> Fixtures & Brackets</div>
+        <div class="nav-item" onclick="navigate(this,'results')"><span class="nav-icon">🎖️</span> Results & Medals</div>
+        <div class="nav-item" onclick="navigate(this,'rankings')"><span class="nav-icon">📈</span> Rankings</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Federation</div>
+        <div class="nav-item" onclick="navigate(this,'federation')"><span class="nav-icon">🌐</span> Fed. Dashboard</div>
+        <div class="nav-item" onclick="navigate(this,'reports')"><span class="nav-icon">📄</span> Reports & Export</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Advanced</div>
+        <div class="nav-item" onclick="navigate(this,'audit')"><span class="nav-icon">🔍</span> Audit Log<span class="nav-badge">12</span></div>
+        <div class="nav-item" onclick="navigate(this,'notifications')"><span class="nav-icon">🔔</span> Notifications<span class="nav-badge cyan">3</span></div>
+        <div class="nav-item" onclick="navigate(this,'payments')"><span class="nav-icon">💳</span> Payments (Mock)</div>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="logout-btn" onclick="doLogout()">🚪 Sign Out</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h3 id="topbar-title">Dashboard</h3>
+        <span id="topbar-sub">Overview of all championships</span>
+      </div>
+      <div class="topbar-right">
+        <div class="search-bar" style="width:200px">
+          <span style="color:var(--text3)">🔍</span>
+          <input placeholder="Search...">
+        </div>
+        <div class="topbar-btn" onclick="navigate(document.querySelector('.nav-item[onclick*=notifications]'),'notifications')">🔔<span class="notif-dot"></span></div>
+        <div class="topbar-btn" style="background:linear-gradient(135deg,var(--cyan2),var(--purple));border:none;color:#fff;font-weight:700;font-size:0.8rem;">RC</div>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- ======== DASHBOARD ======== -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div class="page-title"><h2>CHAMPIONSHIP OVERVIEW</h2><p>Season 2025–26 • All Federations</p></div>
+          <button class="btn btn-gold" onclick="openModal('modal-championship')">＋ New Championship</button>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card gold"><div class="stat-icon">🏆</div><div class="stat-value">14</div><div class="stat-label">Active Championships</div><div class="stat-change">↑ 3 from last month</div></div>
+          <div class="stat-card cyan"><div class="stat-icon">🥋</div><div class="stat-value">1,284</div><div class="stat-label">Registered Athletes</div><div class="stat-change">↑ 127 new this week</div></div>
+          <div class="stat-card green"><div class="stat-icon">⚔️</div><div class="stat-value">342</div><div class="stat-label">Matches Scheduled</div><div class="stat-change">↑ 48 pending today</div></div>
+          <div class="stat-card red"><div class="stat-icon">🌐</div><div class="stat-value">5</div><div class="stat-label">Sport Federations</div><div class="stat-change">Ju-Jitsu, MMA, Wrestling+</div></div>
+        </div>
+        <div class="grid-2" style="margin-bottom:20px">
+          <div class="card">
+            <div class="card-header"><h4>🏅 Recent Championships</h4><button class="btn btn-outline btn-sm" onclick="navigate(document.querySelectorAll('.nav-item')[2],'championships')">View All</button></div>
+            <div class="card-body">
+              <table><thead><tr><th>Event</th><th>Sport</th><th>Status</th><th>Athletes</th></tr></thead>
+              <tbody>
+                <tr><td><b>National Ju-Jitsu Open 2026</b></td><td><span class="badge badge-cyan">Ju-Jitsu</span></td><td><span class="badge badge-green">Ongoing</span></td><td>184</td></tr>
+                <tr><td><b>State Wrestling Championship</b></td><td><span class="badge badge-purple">Wrestling</span></td><td><span class="badge badge-gold">Upcoming</span></td><td>96</td></tr>
+                <tr><td><b>MMA Invitational Cup</b></td><td><span class="badge badge-red">MMA</span></td><td><span class="badge badge-green">Ongoing</span></td><td>64</td></tr>
+                <tr><td><b>Grappling Nationals</b></td><td><span class="badge badge-orange">Grappling</span></td><td><span class="badge badge-gray">Completed</span></td><td>112</td></tr>
+              </tbody></table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h4>📊 Registrations (Last 7 Days)</h4></div>
+            <div class="card-body">
+              <div class="mini-chart">
+                <div class="bar-col" style="height:30%"></div>
+                <div class="bar-col" style="height:55%"></div>
+                <div class="bar-col" style="height:40%"></div>
+                <div class="bar-col" style="height:80%"></div>
+                <div class="bar-col" style="height:60%"></div>
+                <div class="bar-col" style="height:90%"></div>
+                <div class="bar-col" style="height:100%"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:8px;color:var(--text3);font-size:0.72rem;font-family:'Rajdhani',sans-serif">
+                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+              </div>
+              <div style="margin-top:20px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.82rem"><span>Ju-Jitsu</span><span style="color:var(--gold)">68%</span></div>
+                <div class="progress"><div class="progress-fill" style="width:68%"></div></div>
+                <div style="display:flex;justify-content:space-between;margin:12px 0 8px;font-size:0.82rem"><span>MMA</span><span style="color:var(--cyan)">45%</span></div>
+                <div class="progress"><div class="progress-fill cyan" style="width:45%"></div></div>
+                <div style="display:flex;justify-content:space-between;margin:12px 0 8px;font-size:0.82rem"><span>Wrestling</span><span style="color:var(--green)">32%</span></div>
+                <div class="progress"><div class="progress-fill green" style="width:32%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h4>⚡ Quick Actions</h4></div>
+          <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px">
+            <button class="btn btn-gold" onclick="openModal('modal-championship')">＋ Create Championship</button>
+            <button class="btn btn-cyan" onclick="navigate(document.querySelectorAll('.nav-item')[4],'athletes')">🥋 Register Athlete</button>
+            <button class="btn btn-outline" onclick="navigate(document.querySelectorAll('.nav-item')[5],'fixtures')">⚔️ Generate Fixtures</button>
+            <button class="btn btn-green" onclick="navigate(document.querySelectorAll('.nav-item')[6],'results')">🎖️ Enter Results</button>
+            <button class="btn btn-outline" onclick="navigate(document.querySelectorAll('.nav-item')[9],'reports')">📄 Export Report</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== USER MANAGEMENT ======== -->
+      <div class="page" id="page-users">
+        <div class="page-header">
+          <div class="page-title"><h2>USER MANAGEMENT</h2><p>Manage roles, access, and federation assignments</p></div>
+          <button class="btn btn-gold" onclick="openModal('modal-user')">＋ Add User</button>
+        </div>
+        <div class="stat-grid" style="grid-template-columns:repeat(6,1fr)">
+          <div class="stat-card gold"><div class="stat-icon">⚡</div><div class="stat-value">3</div><div class="stat-label">Admins</div></div>
+          <div class="stat-card cyan"><div class="stat-icon">🌐</div><div class="stat-value">5</div><div class="stat-label">Federation</div></div>
+          <div class="stat-card green"><div class="stat-icon">📋</div><div class="stat-value">12</div><div class="stat-label">Organizers</div></div>
+          <div class="stat-card" style="border-color:var(--border)"><div class="stat-icon">🥋</div><div class="stat-value" style="color:var(--purple)">1,284</div><div class="stat-label">Athletes</div></div>
+          <div class="stat-card" style="border-color:var(--border)"><div class="stat-icon">🟨</div><div class="stat-value" style="color:var(--orange)">28</div><div class="stat-label">Referees</div></div>
+          <div class="stat-card red"><div class="stat-icon">🎯</div><div class="stat-value">47</div><div class="stat-label">Coaches</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h4>👥 All Users</h4>
+            <div class="search-bar"><span style="color:var(--text3)">🔍</span><input placeholder="Search users..."></div>
+          </div>
+          <div class="card-body table-wrap">
+            <table><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Federation</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,var(--gold),var(--orange));color:#000">RC</div><b>Raghavendra Chauhan</b></div></td>
+                <td style="color:var(--text2)">admin@championx.com</td>
+                <td><span class="badge badge-gold">Admin</span></td>
+                <td>All Federations</td>
+                <td><span class="badge badge-green">Active</span></td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,var(--cyan),var(--purple));color:#fff">KS</div><b>Kiran Sharma</b></div></td>
+                <td style="color:var(--text2)">kiran@jujitsu.org</td>
+                <td><span class="badge badge-cyan">Federation</span></td>
+                <td>Ju-Jitsu Federation</td>
+                <td><span class="badge badge-green">Active</span></td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,var(--red),var(--purple));color:#fff">AP</div><b>Arjun Patel</b></div></td>
+                <td style="color:var(--text2)">arjun@mmafed.in</td>
+                <td><span class="badge badge-cyan">Federation</span></td>
+                <td>MMA Federation</td>
+                <td><span class="badge badge-green">Active</span></td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,var(--green),var(--cyan));color:#000">MV</div><b>Maya Verma</b></div></td>
+                <td style="color:var(--text2)">maya@wrestle.in</td>
+                <td><span class="badge badge-purple">Organizer</span></td>
+                <td>Wrestling Federation</td>
+                <td><span class="badge badge-gold">Pending</span></td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff">SK</div><b>Sunil Kapoor</b></div></td>
+                <td style="color:var(--text2)">sunil.ref@jujitsu.org</td>
+                <td><span class="badge badge-orange">Referee</span></td>
+                <td>Ju-Jitsu Federation</td>
+                <td><span class="badge badge-green">Active</span></td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,#f97316,#eab308);color:#000">NR</div><b>Neha Rawat</b></div></td>
+                <td style="color:var(--text2)">neha.ref@mmafed.in</td>
+                <td><span class="badge badge-orange">Referee</span></td>
+                <td>MMA Federation</td>
+                <td><span class="badge badge-green">Active</span></td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,#10b981,#3b82f6);color:#fff">DG</div><b>Deepak Gupta</b></div></td>
+                <td style="color:var(--text2)">deepak.coach@jujitsu.org</td>
+                <td><span class="badge badge-cyan" style="background:rgba(16,185,129,0.12);color:#10b981">Coach</span></td>
+                <td>Ju-Jitsu Federation</td>
+                <td><span class="badge badge-green">Active</span></td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,#6366f1,#ec4899);color:#fff">SR</div><b>Sunita Rao</b></div></td>
+                <td style="color:var(--text2)">sunita.coach@wrestle.in</td>
+                <td><span class="badge badge-cyan" style="background:rgba(16,185,129,0.12);color:#10b981">Coach</span></td>
+                <td>Wrestling Federation</td>
+                <td><span class="badge badge-gold">Pending</span></td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td>
+              </tr>
+            </tbody></table>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top:20px">
+          <div class="card">
+            <div class="card-header"><h4>🔐 Role-Based Access Control</h4></div>
+            <div class="card-body">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div><span style="font-weight:600">Admin</span><div style="font-size:0.75rem;color:var(--text3)">Full system access, all modules</div></div><label class="switch"><input type="checkbox" checked disabled><span class="slider"></span></label></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div><span style="font-weight:600">Federation</span><div style="font-size:0.75rem;color:var(--text3)">Championship & athlete management</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div><span style="font-weight:600">Organizer</span><div style="font-size:0.75rem;color:var(--text3)">Event operations, fixtures, results</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div><span style="font-weight:600">Referee</span><div style="font-size:0.75rem;color:var(--text3)">Enter match scores & results only</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div><span style="font-weight:600">Coach</span><div style="font-size:0.75rem;color:var(--text3)">View athlete profiles & schedules</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0"><div><span style="font-weight:600">Athlete</span><div style="font-size:0.75rem;color:var(--text3)">View own profile, results & rankings</div></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h4>🌐 Federation Assignment</h4></div>
+            <div class="card-body">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span>🥋 Ju-Jitsu</span><span class="badge badge-green">2 Assigned</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span>🤼 Wrestling</span><span class="badge badge-green">3 Assigned</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span>🥊 MMA</span><span class="badge badge-gold">1 Assigned</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span>🤸 Grappling</span><span class="badge badge-green">2 Assigned</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0"><span>🦵 Kickboxing</span><span class="badge badge-red">Unassigned</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== CHAMPIONSHIPS ======== -->
+      <div class="page" id="page-championships">
+        <div class="page-header">
+          <div class="page-title"><h2>CHAMPIONSHIP MANAGEMENT</h2><p>Create, manage and monitor all events</p></div>
+          <button class="btn btn-gold" onclick="openModal('modal-championship')">＋ Create Event</button>
+        </div>
+        <div class="tabs">
+          <div class="tab active" onclick="activateTab(this)">All Events</div>
+          <div class="tab" onclick="activateTab(this)">Upcoming</div>
+          <div class="tab" onclick="activateTab(this)">Ongoing</div>
+          <div class="tab" onclick="activateTab(this)">Completed</div>
+        </div>
+        <div class="grid-3">
+          <div class="pay-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div><span class="badge badge-green" style="margin-bottom:10px">Ongoing</span><h3 style="font-size:1.4rem;margin-bottom:4px">National Ju-Jitsu Open 2026</h3><p style="color:var(--text2);font-size:0.82rem">Agra Sports Complex • Mar 28 – Apr 5</p></div>
+              <div style="font-size:2rem">🥋</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+              <div><div style="color:var(--text3);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px">Athletes</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold)">184</div></div>
+              <div><div style="color:var(--text3);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px">Categories</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--cyan)">12</div></div>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:12px">
+              <button class="btn btn-outline btn-sm">✏️ Edit</button>
+              <button class="btn btn-cyan btn-sm">⚔️ Fixtures</button>
+              <button class="btn btn-red btn-sm">🗑️</button>
+            </div>
+          </div>
+          <div class="pay-card" style="--gold:#a855f7;--orange:#7c3aed">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div><span class="badge badge-gold" style="margin-bottom:10px">Upcoming</span><h3 style="font-size:1.4rem;margin-bottom:4px">State Wrestling Championship</h3><p style="color:var(--text2);font-size:0.82rem">Lucknow Indoor Stadium • Apr 12 – 14</p></div>
+              <div style="font-size:2rem">🤼</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+              <div><div style="color:var(--text3);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px">Athletes</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold)">96</div></div>
+              <div><div style="color:var(--text3);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px">Categories</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--cyan)">8</div></div>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:12px">
+              <button class="btn btn-outline btn-sm">✏️ Edit</button>
+              <button class="btn btn-gold btn-sm">⚔️ Setup</button>
+              <button class="btn btn-red btn-sm">🗑️</button>
+            </div>
+          </div>
+          <div class="pay-card" style="opacity:0.7">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div><span class="badge badge-gray" style="margin-bottom:10px">Completed</span><h3 style="font-size:1.4rem;margin-bottom:4px">Grappling Nationals 2025</h3><p style="color:var(--text2);font-size:0.82rem">Delhi Sports Hub • Dec 10 – 12</p></div>
+              <div style="font-size:2rem">🤸</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+              <div><div style="color:var(--text3);font-size:0.72rem">Athletes</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem">112</div></div>
+              <div><div style="color:var(--text3);font-size:0.72rem">Categories</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem">10</div></div>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:12px">
+              <button class="btn btn-outline btn-sm">👁️ View</button>
+              <button class="btn btn-outline btn-sm">📄 Report</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== CATEGORIES ======== -->
+      <div class="page" id="page-categories">
+        <div class="page-header">
+          <div class="page-title"><h2>CATEGORY MANAGEMENT</h2><p>Weight classes, age groups & competition tiers</p></div>
+          <button class="btn btn-gold" onclick="openModal('modal-category')">＋ Add Category</button>
+        </div>
+        <div class="card">
+          <div class="card-header"><h4>📂 National Ju-Jitsu Open 2026 — Categories</h4>
+            <select style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:0.85rem">
+              <option>National Ju-Jitsu Open 2026</option><option>State Wrestling Championship</option>
+            </select>
+          </div>
+          <div class="card-body table-wrap">
+            <table><thead><tr><th>Category</th><th>Age Group</th><th>Weight Limit</th><th>Athletes</th><th>Max Athletes</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><b>U-60 Senior Men</b></td><td><span class="badge badge-cyan">Senior (18-35)</span></td><td>≤ 60 kg</td><td>12</td><td>16</td><td><span class="badge badge-green">Open</span></td><td><div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td></tr>
+              <tr><td><b>U-66 Senior Men</b></td><td><span class="badge badge-cyan">Senior (18-35)</span></td><td>≤ 66 kg</td><td>16</td><td>16</td><td><span class="badge badge-red">Full</span></td><td><div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td></tr>
+              <tr><td><b>U-52 Junior Women</b></td><td><span class="badge badge-purple">Junior (15-17)</span></td><td>≤ 52 kg</td><td>8</td><td>16</td><td><span class="badge badge-green">Open</span></td><td><div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td></tr>
+              <tr><td><b>U-73 Senior Men</b></td><td><span class="badge badge-cyan">Senior (18-35)</span></td><td>≤ 73 kg</td><td>14</td><td>16</td><td><span class="badge badge-gold">Closing</span></td><td><div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td></tr>
+              <tr><td><b>U-45 Cadet Boys</b></td><td><span class="badge badge-orange">Cadet (13-14)</span></td><td>≤ 45 kg</td><td>6</td><td>12</td><td><span class="badge badge-green">Open</span></td><td><div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm">✏️</button><button class="btn btn-red btn-sm">🗑️</button></div></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== ATHLETES ======== -->
+      <div class="page" id="page-athletes">
+        <div class="page-header">
+          <div class="page-title"><h2>ATHLETE REGISTRATION</h2><p>Secure registration with duplicate prevention</p></div>
+          <button class="btn btn-gold" onclick="openModal('modal-athlete')">
+         ＋ Register Athlete
+            </button>
+        </div>
+        <div class="alert alert-info">🛡️ Duplicate prevention active — athletes are validated by name + date of birth + federation before registration.</div>
+        <div class="stat-grid">
+          <div class="stat-card gold"><div class="stat-icon">🥋</div><div class="stat-value">1,284</div><div class="stat-label">Total Athletes</div></div>
+          <div class="stat-card cyan"><div class="stat-icon">✅</div><div class="stat-value">1,241</div><div class="stat-label">Verified</div></div>
+          <div class="stat-card green"><div class="stat-icon">⏳</div><div class="stat-value">43</div><div class="stat-label">Pending Review</div></div>
+          <div class="stat-card red"><div class="stat-icon">❌</div><div class="stat-value">7</div><div class="stat-label">Duplicate Flags</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h4>🥋 Athlete Registry</h4>
+            <div style="display:flex;gap:8px">
+              <div class="search-bar" style="width:180px"><span style="color:var(--text3)">🔍</span><input placeholder="Search athlete..."></div>
+              <select style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:0.82rem"><option>All Sports</option><option>Ju-Jitsu</option><option>MMA</option></select>
+            </div>
+          </div>
+          <div class="card-body table-wrap">
+            <table><thead><tr><th>ID</th><th>Athlete</th><th>Age</th><th>Weight</th><th>Sport</th><th>Experience</th><th>Category</th><th>Status</th></tr></thead>
+            <tbody id="athlete-table-body">
+                
+              
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== REFEREES ======== -->
+      <div class="page" id="page-referees">
+        <div class="page-header">
+          <div class="page-title"><h2>REFEREE MANAGEMENT</h2><p>Assign and manage certified referees for championships</p></div>
+          <button class="btn btn-gold" onclick="openModal('modal-referee')">＋ Add Referee</button>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card gold"><div class="stat-icon">🟨</div><div class="stat-value">28</div><div class="stat-label">Total Referees</div></div>
+          <div class="stat-card cyan"><div class="stat-icon">✅</div><div class="stat-value">22</div><div class="stat-label">Certified</div></div>
+          <div class="stat-card green"><div class="stat-icon">📅</div><div class="stat-value">14</div><div class="stat-label">Assigned This Event</div></div>
+          <div class="stat-card red"><div class="stat-icon">⚠️</div><div class="stat-value">3</div><div class="stat-label">Certification Expiring</div></div>
+        </div>
+        <div class="grid-2" style="margin-bottom:20px">
+          <div class="card">
+            <div class="card-header"><h4>🟨 Referee Registry</h4></div>
+            <div class="card-body table-wrap">
+              <table><thead><tr><th>ID</th><th>Name</th><th>Grade</th><th>Sport</th><th>Assigned Match</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td style="color:var(--text3)">#REF-001</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:0.65rem">SK</div><b>Sunil Kapoor</b></div></td><td><span class="badge badge-gold">Grade A</span></td><td><span class="badge badge-cyan">Ju-Jitsu</span></td><td>#M-007 Final</td><td><span class="badge badge-green">Assigned</span></td><td><button class="btn btn-outline btn-sm">✏️</button></td></tr>
+                <tr><td style="color:var(--text3)">#REF-002</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,#f97316,#eab308);color:#000;font-size:0.65rem">NR</div><b>Neha Rawat</b></div></td><td><span class="badge badge-gold">Grade A</span></td><td><span class="badge badge-red">MMA</span></td><td>#M-003 SF</td><td><span class="badge badge-green">Assigned</span></td><td><button class="btn btn-outline btn-sm">✏️</button></td></tr>
+                <tr><td style="color:var(--text3)">#REF-003</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,var(--cyan),var(--purple));color:#fff;font-size:0.65rem">PB</div><b>Pankaj Bhatt</b></div></td><td><span class="badge badge-cyan">Grade B</span></td><td><span class="badge badge-purple">Wrestling</span></td><td>—</td><td><span class="badge badge-gold">Available</span></td><td><button class="btn btn-outline btn-sm">✏️</button></td></tr>
+                <tr><td style="color:var(--text3)">#REF-004</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,var(--green),var(--cyan));color:#000;font-size:0.65rem">RS</div><b>Ravi Sinha</b></div></td><td><span class="badge badge-purple">Grade C</span></td><td><span class="badge badge-orange">Grappling</span></td><td>—</td><td><span class="badge badge-red">⚠️ Expiring</span></td><td><button class="btn btn-outline btn-sm">✏️</button></td></tr>
+              </tbody></table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h4>📋 Match Assignments — National Ju-Jitsu Open 2026</h4></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div><div style="font-weight:600;font-size:0.9rem">🏆 Final — U-66 Senior Men</div><div style="color:var(--text2);font-size:0.78rem;margin-top:2px">Mat 1 • Apr 1, 05:00 PM</div></div>
+                    <div style="text-align:right"><div style="font-size:0.8rem;color:var(--gold)">Sunil Kapoor</div><span class="badge badge-gold" style="font-size:0.65rem">Grade A</span></div>
+                  </div>
+                </div>
+                <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div><div style="font-weight:600;font-size:0.9rem">SF — U-66 Senior Men</div><div style="color:var(--text2);font-size:0.78rem;margin-top:2px">Mat 1 • Apr 1, 02:00 PM</div></div>
+                    <div style="text-align:right"><div style="font-size:0.8rem;color:var(--cyan)">Neha Rawat</div><span class="badge badge-gold" style="font-size:0.65rem">Grade A</span></div>
+                  </div>
+                </div>
+                <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div><div style="font-weight:600;font-size:0.9rem">QF Round — U-60 Senior Men</div><div style="color:var(--text2);font-size:0.78rem;margin-top:2px">Mat 2 • Apr 1, 10:00 AM</div></div>
+                    <div style="text-align:right"><div style="font-size:0.8rem;color:var(--text2)">Unassigned</div><button class="btn btn-gold btn-sm" style="margin-top:4px;font-size:0.65rem" onclick="showToast('Referee assigned!','success')">Assign</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h4>📜 Certification Levels</h4></div>
+          <div class="card-body" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+            <div style="background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.25);border-radius:10px;padding:16px;text-align:center">
+              <div style="font-size:1.8rem;margin-bottom:8px">🥇</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold)">Grade A</div>
+              <div style="color:var(--text2);font-size:0.78rem;margin-top:4px">National / International matches. 5+ years certified.</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);margin-top:8px">8</div>
+            </div>
+            <div style="background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2);border-radius:10px;padding:16px;text-align:center">
+              <div style="font-size:1.8rem;margin-bottom:8px">🥈</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--cyan)">Grade B</div>
+              <div style="color:var(--text2);font-size:0.78rem;margin-top:4px">State-level events. 2–5 years certified.</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--cyan);margin-top:8px">14</div>
+            </div>
+            <div style="background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.2);border-radius:10px;padding:16px;text-align:center">
+              <div style="font-size:1.8rem;margin-bottom:8px">🥉</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--purple)">Grade C</div>
+              <div style="color:var(--text2);font-size:0.78rem;margin-top:4px">District / local events. Under 2 years.</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--purple);margin-top:8px">6</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== COACHES ======== -->
+      <div class="page" id="page-coaches">
+        <div class="page-header">
+          <div class="page-title"><h2>COACH MANAGEMENT</h2><p>Manage coaches, their athletes and team assignments</p></div>
+          <button class="btn btn-gold" onclick="openModal('modal-coach')">＋ Add Coach</button>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card gold"><div class="stat-icon">🎯</div><div class="stat-value">47</div><div class="stat-label">Total Coaches</div></div>
+          <div class="stat-card cyan"><div class="stat-icon">🥋</div><div class="stat-value">312</div><div class="stat-label">Athletes Coached</div></div>
+          <div class="stat-card green"><div class="stat-icon">🏆</div><div class="stat-value">18</div><div class="stat-label">Active This Season</div></div>
+          <div class="stat-card red"><div class="stat-icon">📜</div><div class="stat-value">5</div><div class="stat-label">License Renewal Due</div></div>
+        </div>
+        <div class="grid-2" style="margin-bottom:20px">
+          <div class="card">
+            <div class="card-header"><h4>🎯 Coach Registry</h4></div>
+            <div class="card-body table-wrap">
+              <table><thead><tr><th>ID</th><th>Coach</th><th>Sport</th><th>Athletes</th><th>License</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td style="color:var(--text3)">#COA-001</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,#10b981,#3b82f6);color:#fff;font-size:0.65rem">DG</div><b>Deepak Gupta</b></div></td><td><span class="badge badge-cyan">Ju-Jitsu</span></td><td>12</td><td><span class="badge badge-green">Valid 2027</span></td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Coach profile opened','info')">👁️</button></td></tr>
+                <tr><td style="color:var(--text3)">#COA-002</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,#6366f1,#ec4899);color:#fff;font-size:0.65rem">SR</div><b>Sunita Rao</b></div></td><td><span class="badge badge-purple">Wrestling</span></td><td>8</td><td><span class="badge badge-green">Valid 2026</span></td><td><span class="badge badge-gold">Pending</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Coach profile opened','info')">👁️</button></td></tr>
+                <tr><td style="color:var(--text3)">#COA-003</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,#f59e0b,#dc2626);color:#fff;font-size:0.65rem">AK</div><b>Ankit Khanna</b></div></td><td><span class="badge badge-red">MMA</span></td><td>15</td><td><span class="badge badge-red">⚠️ Exp. Soon</span></td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Coach profile opened','info')">👁️</button></td></tr>
+                <tr><td style="color:var(--text3)">#COA-004</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:linear-gradient(135deg,#0ea5e9,#6366f1);color:#fff;font-size:0.65rem">PM</div><b>Pooja Mehta</b></div></td><td><span class="badge badge-orange">Grappling</span></td><td>9</td><td><span class="badge badge-green">Valid 2028</span></td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Coach profile opened','info')">👁️</button></td></tr>
+              </tbody></table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h4>🥋 Coach → Athlete Assignments</h4></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px">
+                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+                    <div class="avatar" style="background:linear-gradient(135deg,#10b981,#3b82f6);color:#fff;font-size:0.65rem;width:36px;height:36px;flex-shrink:0">DG</div>
+                    <div><div style="font-weight:600">Deepak Gupta</div><div style="color:var(--text2);font-size:0.75rem">Ju-Jitsu Coach • 12 athletes</div></div>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px">
+                    <span class="badge badge-cyan">Rohit Kumar</span>
+                    <span class="badge badge-cyan">Priya Singh</span>
+                    <span class="badge badge-cyan">Anjali Mishra</span>
+                    <span class="badge badge-gray">+9 more</span>
+                  </div>
+                </div>
+                <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px">
+                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+                    <div class="avatar" style="background:linear-gradient(135deg,#f59e0b,#dc2626);color:#fff;font-size:0.65rem;width:36px;height:36px;flex-shrink:0">AK</div>
+                    <div><div style="font-weight:600">Ankit Khanna</div><div style="color:var(--text2);font-size:0.75rem">MMA Coach • 15 athletes</div></div>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px">
+                    <span class="badge badge-red">Vikram Thakur</span>
+                    <span class="badge badge-red">Sumit Joshi</span>
+                    <span class="badge badge-gray">+13 more</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h4>📊 Coach Performance Summary</h4></div>
+          <div class="card-body table-wrap">
+            <table><thead><tr><th>Coach</th><th>Sport</th><th>Athletes</th><th>Gold 🥇</th><th>Silver 🥈</th><th>Bronze 🥉</th><th>Win Rate</th><th>Season</th></tr></thead>
+            <tbody>
+              <tr><td><b>Deepak Gupta</b></td><td><span class="badge badge-cyan">Ju-Jitsu</span></td><td>12</td><td style="color:var(--gold)">4</td><td style="color:#c0c0c0">3</td><td style="color:#cd7f32">2</td><td><span style="color:var(--green)">72%</span></td><td>2025–26</td></tr>
+              <tr><td><b>Ankit Khanna</b></td><td><span class="badge badge-red">MMA</span></td><td>15</td><td style="color:var(--gold)">2</td><td style="color:#c0c0c0">4</td><td style="color:#cd7f32">5</td><td><span style="color:var(--gold)">60%</span></td><td>2025–26</td></tr>
+              <tr><td><b>Sunita Rao</b></td><td><span class="badge badge-purple">Wrestling</span></td><td>8</td><td style="color:var(--gold)">1</td><td style="color:#c0c0c0">2</td><td style="color:#cd7f32">1</td><td><span style="color:var(--gold)">50%</span></td><td>2025–26</td></tr>
+              <tr><td><b>Pooja Mehta</b></td><td><span class="badge badge-orange">Grappling</span></td><td>9</td><td style="color:var(--gold)">3</td><td style="color:#c0c0c0">2</td><td style="color:#cd7f32">3</td><td><span style="color:var(--green)">67%</span></td><td>2025–26</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== FIXTURES ======== -->
+      <div class="page" id="page-fixtures">
+        <div class="page-header">
+          <div class="page-title"><h2>FIXTURES & BRACKETS</h2><p>Auto-generated tournament brackets</p></div>
+          <button class="btn btn-gold" onclick="showToast('Fixtures generated for U-66 Senior Men!','success')">⚡ Auto-Generate</button>
+        </div>
+        <div class="alert alert-success">✅ Fixtures generated for <b>U-66 Senior Men</b> — 16 athletes, Single Elimination format</div>
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header"><h4>⚔️ U-66 Senior Men — Tournament Bracket</h4>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-outline btn-sm">🖨️ Print</button>
+              <button class="btn btn-cyan btn-sm">📤 Export PDF</button>
+            </div>
+          </div>
+          <div class="card-body" style="overflow-x:auto">
+            <div class="bracket">
+              <div class="bracket-round">
+                <div class="bracket-round-title">Quarterfinals</div>
+                <div class="bracket-match"><div class="bracket-team winner">Rohit Kumar<span class="score">10</span></div><div class="bracket-team">Shyam Das<span class="score">4</span></div></div>
+                <div class="bracket-match"><div class="bracket-team winner">Amit Verma<span class="score">8</span></div><div class="bracket-team">Naresh K.<span class="score">6</span></div></div>
+                <div class="bracket-match"><div class="bracket-team winner">Kiran Rao<span class="score">TKO</span></div><div class="bracket-team">Dev Pandey<span class="score">-</span></div></div>
+                <div class="bracket-match"><div class="bracket-team winner">Suresh M.<span class="score">12</span></div><div class="bracket-team">Arun T.<span class="score">7</span></div></div>
+              </div>
+              <div class="bracket-round">
+                <div class="bracket-round-title">Semifinals</div>
+                <div class="bracket-match"><div class="bracket-team winner">Rohit Kumar<span class="score">9</span></div><div class="bracket-team">Amit Verma<span class="score">7</span></div></div>
+                <div class="bracket-match"><div class="bracket-team">Kiran Rao<span class="score">5</span></div><div class="bracket-team winner">Suresh M.<span class="score">8</span></div></div>
+              </div>
+              <div class="bracket-round">
+                <div class="bracket-round-title">🏆 Final</div>
+                <div class="bracket-match" style="border:1px solid var(--gold)">
+                  <div class="bracket-team winner" style="background:rgba(245,197,24,0.12)">Rohit Kumar 🥇<span class="score" style="color:var(--gold)">11</span></div>
+                  <div class="bracket-team">Suresh M.<span class="score">8</span></div>
+                </div>
+              </div>
+              <div class="bracket-round">
+                <div class="bracket-round-title">🥉 3rd Place</div>
+                <div class="bracket-match">
+                  <div class="bracket-team winner">Amit Verma 🥉<span class="score">7</span></div>
+                  <div class="bracket-team">Kiran Rao<span class="score">4</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h4>📅 Match Schedule</h4></div>
+          <div class="card-body table-wrap">
+            <table><thead><tr><th>Match ID</th><th>Round</th><th>Athlete 1</th><th>Athlete 2</th><th>Time</th><th>Venue</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--text3)">#M-001</td><td>QF</td><td>Rohit Kumar</td><td>Shyam Das</td><td>10:00 AM</td><td>Mat 1</td><td><span class="badge badge-gray">Completed</span></td></tr>
+              <tr><td style="color:var(--text3)">#M-002</td><td>QF</td><td>Amit Verma</td><td>Naresh K.</td><td>10:30 AM</td><td>Mat 1</td><td><span class="badge badge-gray">Completed</span></td></tr>
+              <tr><td style="color:var(--text3)">#M-005</td><td>SF</td><td>Rohit Kumar</td><td>Amit Verma</td><td>02:00 PM</td><td>Mat 1</td><td><span class="badge badge-gray">Completed</span></td></tr>
+              <tr><td style="color:var(--text3)">#M-007</td><td>Final</td><td>Rohit Kumar</td><td>Suresh M.</td><td>05:00 PM</td><td>Main Stage</td><td><span class="badge badge-green">Live</span></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== RESULTS ======== -->
+      <div class="page" id="page-results">
+        <div class="page-header">
+          <div class="page-title"><h2>RESULTS & MEDALS</h2><p>Enter match outcomes and assign medal standings</p></div>
+          <button class="btn btn-gold" onclick="openModal('modal-result')">＋ Enter Result</button>
+        </div>
+        <div class="grid-2" style="margin-bottom:20px">
+          <div class="card">
+            <div class="card-header"><h4>🎖️ Medal Standings — U-66 Senior Men</h4></div>
+            <div class="card-body">
+              <div class="rank-row" style="background:rgba(245,197,24,0.08);border-color:rgba(245,197,24,0.25)">
+                <div style="font-size:1.6rem">🥇</div>
+                <div><div class="rank-name">Rohit Kumar</div><div class="rank-meta">Ju-Jitsu Federation • Advanced</div></div>
+                <div class="rank-pts">Gold</div>
+              </div>
+              <div class="rank-row" style="background:rgba(192,192,192,0.05)">
+                <div style="font-size:1.6rem">🥈</div>
+                <div><div class="rank-name">Suresh Malhotra</div><div class="rank-meta">State Federation • Intermediate</div></div>
+                <div class="rank-pts" style="color:#c0c0c0">Silver</div>
+              </div>
+              <div class="rank-row" style="background:rgba(205,127,50,0.05)">
+                <div style="font-size:1.6rem">🥉</div>
+                <div><div class="rank-name">Amit Verma</div><div class="rank-meta">District Federation • Advanced</div></div>
+                <div class="rank-pts" style="color:#cd7f32">Bronze</div>
+              </div>
+              <div class="rank-row">
+                <div style="font-size:1.6rem">🥉</div>
+                <div><div class="rank-name">Kiran Rao</div><div class="rank-meta">Karnataka Federation • Advanced</div></div>
+                <div class="rank-pts" style="color:#cd7f32">Bronze</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h4>📊 Overall Medal Count</h4></div>
+            <div class="card-body table-wrap">
+              <table><thead><tr><th>Federation</th><th>🥇</th><th>🥈</th><th>🥉</th><th>Total</th></tr></thead>
+              <tbody>
+                <tr><td><b>Ju-Jitsu Fed</b></td><td style="color:var(--gold)"><b>4</b></td><td style="color:#c0c0c0">2</td><td style="color:#cd7f32">3</td><td><b>9</b></td></tr>
+                <tr><td><b>Wrestling Fed</b></td><td style="color:var(--gold)"><b>2</b></td><td style="color:#c0c0c0">4</td><td style="color:#cd7f32">1</td><td><b>7</b></td></tr>
+                <tr><td><b>MMA Federation</b></td><td style="color:var(--gold)"><b>1</b></td><td style="color:#c0c0c0">1</td><td style="color:#cd7f32">2</td><td><b>4</b></td></tr>
+                <tr><td><b>Grappling Fed</b></td><td style="color:var(--gold)"><b>3</b></td><td style="color:#c0c0c0">2</td><td style="color:#cd7f32">4</td><td><b>9</b></td></tr>
+              </tbody></table>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h4>📝 Recent Results</h4></div>
+          <div class="card-body table-wrap">
+            <table><thead><tr><th>Match</th><th>Round</th><th>Winner</th><th>Loser</th><th>Score</th><th>Method</th><th>Medal</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--text3)">#M-007</td><td>Final</td><td><b>Rohit Kumar</b></td><td>Suresh M.</td><td>11–8</td><td>Points</td><td><span class="badge badge-gold">🥇 Gold</span></td></tr>
+              <tr><td style="color:var(--text3)">#M-006</td><td>3rd Place</td><td><b>Amit Verma</b></td><td>Kiran Rao</td><td>7–4</td><td>Submission</td><td><span class="badge badge-orange">🥉 Bronze</span></td></tr>
+              <tr><td style="color:var(--text3)">#M-005</td><td>SF</td><td><b>Rohit Kumar</b></td><td>Amit Verma</td><td>9–7</td><td>Points</td><td>—</td></tr>
+              <tr><td style="color:var(--text3)">#M-004</td><td>SF</td><td><b>Suresh M.</b></td><td>Kiran Rao</td><td>8–5</td><td>Points</td><td>—</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== RANKINGS ======== -->
+      <div class="page" id="page-rankings">
+        <div class="page-header">
+          <div class="page-title"><h2>NATIONAL RANKINGS</h2><p>Points-based National & State athlete rankings</p></div>
+          <select style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 14px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:0.85rem">
+            <option>Ju-Jitsu — U-66 Senior Men</option><option>MMA — U-73</option><option>Wrestling — U-74</option>
+          </select>
+        </div>
+        <div class="tabs">
+          <div class="tab active" onclick="activateTab(this)">National Rankings</div>
+          <div class="tab" onclick="activateTab(this)">State Rankings</div>
+          <div class="tab" onclick="activateTab(this)">Medal Rankings</div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <h4 style="font-size:1.1rem;margin-bottom:14px;color:var(--text2);font-family:'Rajdhani',sans-serif;text-transform:uppercase;letter-spacing:1px">🏅 National Leaderboard</h4>
+            <div class="rank-row" style="background:rgba(245,197,24,0.08);border-color:rgba(245,197,24,0.3)">
+              <div class="rank-num gold-bg">1</div>
+              <div><div class="rank-name">Rohit Kumar</div><div class="rank-meta">UP • Agra • Advanced</div></div>
+              <div class="medal-icons"><div class="medal" style="background:rgba(245,197,24,0.2);color:var(--gold)">🥇</div><div class="medal" style="background:rgba(245,197,24,0.2);color:var(--gold)">🥇</div></div>
+              <div class="rank-pts">340</div>
+            </div>
+            <div class="rank-row">
+              <div class="rank-num silver-bg">2</div>
+              <div><div class="rank-name">Suresh Malhotra</div><div class="rank-meta">Delhi • Advanced</div></div>
+              <div class="medal-icons"><div class="medal" style="background:rgba(192,192,192,0.12);color:#c0c0c0">🥈</div></div>
+              <div class="rank-pts">285</div>
+            </div>
+            <div class="rank-row">
+              <div class="rank-num bronze-bg">3</div>
+              <div><div class="rank-name">Amit Verma</div><div class="rank-meta">MP • Bhopal • Advanced</div></div>
+              <div class="medal-icons"><div class="medal" style="background:rgba(205,127,50,0.12);color:#cd7f32">🥉</div></div>
+              <div class="rank-pts">260</div>
+            </div>
+            <div class="rank-row"><div class="rank-num plain">4</div><div><div class="rank-name">Kiran Rao</div><div class="rank-meta">Karnataka • Intermediate</div></div><div class="medal-icons"></div><div class="rank-pts">210</div></div>
+            <div class="rank-row"><div class="rank-num plain">5</div><div><div class="rank-name">Dev Pandey</div><div class="rank-meta">UP • Lucknow • Intermediate</div></div><div></div><div class="rank-pts">195</div></div>
+            <div class="rank-row"><div class="rank-num plain">6</div><div><div class="rank-name">Arun Tiwari</div><div class="rank-meta">Bihar • Patna • Beginner</div></div><div></div><div class="rank-pts">160</div></div>
+          </div>
+          <div>
+            <h4 style="font-size:1.1rem;margin-bottom:14px;color:var(--text2);font-family:'Rajdhani',sans-serif;text-transform:uppercase;letter-spacing:1px">📊 Points Breakdown</h4>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-body">
+                <div style="font-size:0.82rem;color:var(--text2);margin-bottom:12px">Points are calculated based on placement across all championships in the season.</div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>🥇 Gold Medal</span><span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1.2rem">100 pts</span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>🥈 Silver Medal</span><span style="color:#c0c0c0;font-family:'Bebas Neue',sans-serif;font-size:1.2rem">70 pts</span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>🥉 Bronze Medal</span><span style="color:#cd7f32;font-family:'Bebas Neue',sans-serif;font-size:1.2rem">50 pts</span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0"><span>🏅 5th Place</span><span style="color:var(--text2);font-family:'Bebas Neue',sans-serif;font-size:1.2rem">20 pts</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><h4>🔄 Last Updated</h4></div>
+              <div class="card-body" style="font-size:0.82rem;color:var(--text2)">
+                <p>Rankings auto-update after each championship concludes.</p>
+                <p style="margin-top:8px;color:var(--gold)">Last sync: April 1, 2026 — 09:45 AM</p>
+                <button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="showToast('Rankings recalculated!','success')">🔄 Recalculate Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== FEDERATION DASHBOARD ======== -->
+      <div class="page" id="page-federation">
+        <div class="page-header">
+          <div class="page-title"><h2>FEDERATION DASHBOARD</h2><p>Ju-Jitsu Federation — Multi-tenant view</p></div>
+          <select style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 14px;border-radius:8px;font-family:'Rajdhani',sans-serif">
+            <option>🥋 Ju-Jitsu Federation</option><option>🤼 Wrestling Federation</option><option>🥊 MMA Federation</option>
+          </select>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card gold"><div class="stat-icon">🏆</div><div class="stat-value">4</div><div class="stat-label">Championships This Season</div></div>
+          <div class="stat-card cyan"><div class="stat-icon">🥋</div><div class="stat-value">312</div><div class="stat-label">Registered Athletes</div></div>
+          <div class="stat-card green"><div class="stat-icon">📂</div><div class="stat-value">18</div><div class="stat-label">Active Categories</div></div>
+          <div class="stat-card red"><div class="stat-icon">🥇</div><div class="stat-value">7</div><div class="stat-label">Gold Medals Won</div></div>
+        </div>
+        <div class="grid-2" style="margin-bottom:20px">
+          <div class="card">
+            <div class="card-header"><h4>📈 Registration Trend</h4></div>
+            <div class="card-body">
+              <div class="mini-chart" style="height:80px">
+                <div class="bar-col" style="height:40%;background:linear-gradient(to top,var(--cyan),transparent)"></div>
+                <div class="bar-col" style="height:60%;background:linear-gradient(to top,var(--cyan),transparent)"></div>
+                <div class="bar-col" style="height:50%;background:linear-gradient(to top,var(--cyan),transparent)"></div>
+                <div class="bar-col" style="height:75%;background:linear-gradient(to top,var(--cyan),transparent)"></div>
+                <div class="bar-col" style="height:85%;background:linear-gradient(to top,var(--cyan),transparent)"></div>
+                <div class="bar-col" style="height:70%;background:linear-gradient(to top,var(--cyan),transparent)"></div>
+                <div class="bar-col" style="height:100%;background:linear-gradient(to top,var(--cyan),transparent)"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h4>⚡ Quick Actions</h4></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+              <button class="btn btn-gold" onclick="openModal('modal-championship')">＋ Create New Championship</button>
+              <button class="btn btn-cyan" onclick="navigate(document.querySelectorAll('.nav-item')[4],'athletes')">🥋 Register Athletes</button>
+              <button class="btn btn-outline" onclick="navigate(document.querySelectorAll('.nav-item')[9],'reports')">📄 Generate Report</button>
+              <button class="btn btn-outline" onclick="navigate(document.querySelectorAll('.nav-item')[8],'rankings')">📈 View Rankings</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h4>🌐 Multi-Tenant Isolation — Active Federations</h4></div>
+          <div class="card-body table-wrap">
+            <table><thead><tr><th>Federation</th><th>Sport</th><th>Country</th><th>Championships</th><th>Athletes</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><b>Ju-Jitsu Federation</b></td><td>🥋 Ju-Jitsu</td><td>🇮🇳 India</td><td>4</td><td>312</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><b>Wrestling Federation</b></td><td>🤼 Wrestling</td><td>🇮🇳 India</td><td>3</td><td>224</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><b>MMA Federation</b></td><td>🥊 MMA</td><td>🇮🇳 India</td><td>2</td><td>128</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><b>Grappling India</b></td><td>🤸 Grappling</td><td>🇮🇳 India</td><td>3</td><td>198</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><b>Kickboxing Assoc.</b></td><td>🦵 Kickboxing</td><td>🇮🇳 India</td><td>1</td><td>88</td><td><span class="badge badge-gold">Setup</span></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== REPORTS ======== -->
+      <div class="page" id="page-reports">
+        <div class="page-header">
+          <div class="page-title"><h2>REPORTS & EXPORT</h2><p>Generate, download and print championship data</p></div>
+        </div>
+        <div class="grid-3" style="margin-bottom:24px">
+          <div class="card" style="cursor:pointer;transition:border-color 0.2s" onmouseenter="this.style.borderColor='var(--gold)'" onmouseleave="this.style.borderColor='var(--border)'">
+            <div class="card-body" style="text-align:center;padding:28px 20px">
+              <div style="font-size:2.5rem;margin-bottom:12px">📋</div>
+              <h4 style="font-size:1rem;margin-bottom:6px">Athlete Registration</h4>
+              <p style="color:var(--text2);font-size:0.8rem;margin-bottom:16px">Export all athlete registration data with categories</p>
+              <button class="btn btn-gold btn-sm" onclick="showToast('athletes_registration.csv downloaded!','success')">⬇️ Export CSV</button>
+            </div>
+          </div>
+          <div class="card" style="cursor:pointer;transition:border-color 0.2s" onmouseenter="this.style.borderColor='var(--cyan)'" onmouseleave="this.style.borderColor='var(--border)'">
+            <div class="card-body" style="text-align:center;padding:28px 20px">
+              <div style="font-size:2.5rem;margin-bottom:12px">🏆</div>
+              <h4 style="font-size:1rem;margin-bottom:6px">Event Results</h4>
+              <p style="color:var(--text2);font-size:0.8rem;margin-bottom:16px">Match results, scores and medal standings</p>
+              <button class="btn btn-cyan btn-sm" onclick="showToast('event_results.csv downloaded!','success')">⬇️ Export CSV</button>
+            </div>
+          </div>
+          <div class="card" style="cursor:pointer;transition:border-color 0.2s" onmouseenter="this.style.borderColor='var(--green)'" onmouseleave="this.style.borderColor='var(--border)'">
+            <div class="card-body" style="text-align:center;padding:28px 20px">
+              <div style="font-size:2.5rem;margin-bottom:12px">📄</div>
+              <h4 style="font-size:1rem;margin-bottom:6px">Event Summary</h4>
+              <p style="color:var(--text2);font-size:0.8rem;margin-bottom:16px">Full championship summary with analytics</p>
+              <button class="btn btn-green btn-sm" onclick="showToast('event_summary.pdf generated!','success')">📄 Generate PDF</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h4>🖨️ Printable Sheets</h4></div>
+          <div class="card-body">
+            <div class="alert alert-warning">🖨️ Print-friendly versions open in a new tab for direct printing from any browser.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              <button class="btn btn-outline" onclick="showToast('Opening bracket sheet...','info')">⚔️ Tournament Bracket Sheet</button>
+              <button class="btn btn-outline" onclick="showToast('Opening athlete list...','info')">🥋 Athlete List Sheet</button>
+              <button class="btn btn-outline" onclick="showToast('Opening medal tally...','info')">🥇 Medal Tally Sheet</button>
+              <button class="btn btn-outline" onclick="showToast('Opening schedule sheet...','info')">📅 Match Schedule Sheet</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== AUDIT LOG ======== -->
+      <div class="page" id="page-audit">
+        <div class="page-header">
+          <div class="page-title"><h2>AUDIT LOG</h2><p>Complete activity trail with timestamps</p></div>
+          <div style="display:flex;gap:8px">
+            <div class="search-bar"><span style="color:var(--text3)">🔍</span><input placeholder="Search logs..."></div>
+            <button class="btn btn-outline" onclick="showToast('audit_log.csv downloaded!','success')">⬇️ Export</button>
+          </div>
+        </div>
+        <div class="alert alert-info">🔐 All system actions are logged with user ID, action type, entity affected, and precise timestamp. JWT-authenticated sessions only.</div>
+        <div class="card">
+          <div class="card-header"><h4>🔍 Activity Log</h4>
+            <select style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:0.82rem"><option>All Actions</option><option>Create</option><option>Edit</option><option>Delete</option><option>Login</option></select>
+          </div>
+          <div class="card-body">
+            <div class="audit-item">
+              <div class="audit-icon" style="background:rgba(46,213,115,0.12);color:var(--green)">✅</div>
+              <div style="flex:1"><div style="display:flex;justify-content:space-between"><b>Match Result Entered</b><span class="badge badge-green">CREATE</span></div><p style="color:var(--text2);font-size:0.82rem;margin-top:3px">User <b>Raghavendra</b> entered result for Match #M-007 — Winner: Rohit Kumar, Score 11–8</p><div class="audit-time">Apr 1, 2026 · 17:02:43 IST · IP: 192.168.1.10</div></div>
+            </div>
+            <div class="audit-item">
+              <div class="audit-icon" style="background:rgba(245,197,24,0.12);color:var(--gold)">✏️</div>
+              <div style="flex:1"><div style="display:flex;justify-content:space-between"><b>Championship Updated</b><span class="badge badge-gold">EDIT</span></div><p style="color:var(--text2);font-size:0.82rem;margin-top:3px">User <b>Kiran Sharma</b> updated status of "National Ju-Jitsu Open 2026" from <i>Upcoming</i> to <i>Ongoing</i></p><div class="audit-time">Apr 1, 2026 · 09:15:22 IST · IP: 192.168.1.15</div></div>
+            </div>
+            <div class="audit-item">
+              <div class="audit-icon" style="background:rgba(0,212,255,0.1);color:var(--cyan)">🥋</div>
+              <div style="flex:1"><div style="display:flex;justify-content:space-between"><b>Athlete Registered</b><span class="badge badge-cyan">CREATE</span></div><p style="color:var(--text2);font-size:0.82rem;margin-top:3px">User <b>Arjun Patel</b> registered Athlete: Vikram Thakur (#ATH-003) in category U-73 Senior Men</p><div class="audit-time">Mar 28, 2026 · 14:30:11 IST · IP: 192.168.1.22</div></div>
+            </div>
+            <div class="audit-item">
+              <div class="audit-icon" style="background:rgba(255,71,87,0.1);color:var(--red)">🚩</div>
+              <div style="flex:1"><div style="display:flex;justify-content:space-between"><b>Duplicate Flag Raised</b><span class="badge badge-red">WARNING</span></div><p style="color:var(--text2);font-size:0.82rem;margin-top:3px">System detected duplicate registration attempt: Rahul Mehta already registered in same category under federation</p><div class="audit-time">Mar 27, 2026 · 11:44:05 IST · System</div></div>
+            </div>
+            <div class="audit-item">
+              <div class="audit-icon" style="background:rgba(168,85,247,0.1);color:var(--purple)">🔐</div>
+              <div style="flex:1"><div style="display:flex;justify-content:space-between"><b>User Login</b><span class="badge badge-purple">AUTH</span></div><p style="color:var(--text2);font-size:0.82rem;margin-top:3px">User <b>Raghavendra Chauhan</b> logged in successfully. Role: Administrator. Session ID: sess_8f3a...</p><div class="audit-time">Apr 1, 2026 · 08:55:00 IST · IP: 192.168.1.10</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== NOTIFICATIONS ======== -->
+      <div class="page" id="page-notifications">
+        <div class="page-header">
+          <div class="page-title"><h2>NOTIFICATIONS</h2><p>Email alerts and system notifications</p></div>
+          <button class="btn btn-outline" onclick="showToast('All notifications marked as read','info')">✓ Mark All Read</button>
+        </div>
+        <div class="grid-2">
+          <div>
+            <h4 style="font-size:1rem;margin-bottom:14px;font-family:'Rajdhani',sans-serif;text-transform:uppercase;color:var(--text2)">📬 Inbox (3 Unread)</h4>
+            <div class="notif-item notif-unread">
+              <div class="notif-dot2"></div>
+              <div><div style="display:flex;justify-content:space-between"><b style="font-size:0.9rem">Registration Confirmed</b><span style="color:var(--text3);font-size:0.75rem">2h ago</span></div><p style="color:var(--text2);font-size:0.82rem;margin-top:4px">Athlete Rohit Kumar (#ATH-001) has been successfully registered for National Ju-Jitsu Open 2026, Category: U-66 Senior Men.</p><p style="color:var(--cyan);font-size:0.75rem;margin-top:6px">📧 Confirmation email sent to rohit@email.com</p></div>
+            </div>
+            <div class="notif-item notif-unread">
+              <div class="notif-dot2"></div>
+              <div><div style="display:flex;justify-content:space-between"><b style="font-size:0.9rem">⚠️ Duplicate Alert</b><span style="color:var(--text3);font-size:0.75rem">5h ago</span></div><p style="color:var(--text2);font-size:0.82rem;margin-top:4px">Duplicate registration attempt blocked for Rahul Mehta. Admin review required.</p></div>
+            </div>
+            <div class="notif-item notif-unread">
+              <div class="notif-dot2" style="background:var(--gold)"></div>
+              <div><div style="display:flex;justify-content:space-between"><b style="font-size:0.9rem">Championship Starting</b><span style="color:var(--text3);font-size:0.75rem">8h ago</span></div><p style="color:var(--text2);font-size:0.82rem;margin-top:4px">State Wrestling Championship starts in 11 days. 96 athletes registered. Fixtures not yet generated.</p></div>
+            </div>
+            <div class="notif-item" style="opacity:0.6">
+              <div style="width:8px"></div>
+              <div><div style="display:flex;justify-content:space-between"><b style="font-size:0.9rem">Results Published</b><span style="color:var(--text3);font-size:0.75rem">2d ago</span></div><p style="color:var(--text2);font-size:0.82rem;margin-top:4px">Grappling Nationals 2025 final results have been published and rankings updated.</p></div>
+            </div>
+          </div>
+          <div>
+            <h4 style="font-size:1rem;margin-bottom:14px;font-family:'Rajdhani',sans-serif;text-transform:uppercase;color:var(--text2)">📧 Email Config</h4>
+            <div class="card">
+              <div class="card-body">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span>Registration Confirmation</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span>Match Schedule Alerts</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span>Result Notifications</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span>Duplicate Registration Alert</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0"><span>System Status Updates</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                <button class="btn btn-gold btn-sm" style="margin-top:14px;width:100%" onclick="showToast('Email settings saved!','success')">Save Settings</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== PAYMENTS ======== -->
+      <div class="page" id="page-payments">
+        <div class="page-header">
+          <div class="page-title"><h2>PAYMENT MODULE</h2><p>Mock payment integration — Registration fee processing</p></div>
+          <span class="badge badge-gold" style="padding:8px 14px;font-size:0.8rem">MOCK / DEMO</span>
+        </div>
+        <div class="alert alert-warning">⚠️ This is a mock payment module for demonstration. No real transactions are processed. In production, integrate with Razorpay / Stripe / PayU.</div>
+        <div class="stat-grid">
+          <div class="stat-card gold"><div class="stat-icon">💰</div><div class="stat-value">₹2.4L</div><div class="stat-label">Total Collected</div></div>
+          <div class="stat-card cyan"><div class="stat-icon">✅</div><div class="stat-value">1,241</div><div class="stat-label">Paid Registrations</div></div>
+          <div class="stat-card green"><div class="stat-icon">⏳</div><div class="stat-value">43</div><div class="stat-label">Pending Payment</div></div>
+          <div class="stat-card red"><div class="stat-icon">❌</div><div class="stat-value">12</div><div class="stat-label">Failed / Refunded</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h4>💳 Recent Transactions</h4></div>
+            <div class="card-body table-wrap">
+              <table><thead><tr><th>TXN ID</th><th>Athlete</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody>
+                <tr><td style="color:var(--text3)">#TXN-0041</td><td>Rohit Kumar</td><td style="color:var(--green)">₹500</td><td><span class="badge badge-green">Paid</span></td><td style="color:var(--text2)">Apr 1</td></tr>
+                <tr><td style="color:var(--text3)">#TXN-0040</td><td>Priya Singh</td><td style="color:var(--green)">₹500</td><td><span class="badge badge-green">Paid</span></td><td style="color:var(--text2)">Apr 1</td></tr>
+                <tr><td style="color:var(--text3)">#TXN-0039</td><td>Vikram Thakur</td><td style="color:var(--gold)">₹500</td><td><span class="badge badge-gold">Pending</span></td><td style="color:var(--text2)">Mar 31</td></tr>
+                <tr><td style="color:var(--text3)">#TXN-0038</td><td>Rahul Mehta</td><td style="color:var(--red)">₹500</td><td><span class="badge badge-red">Refunded</span></td><td style="color:var(--text2)">Mar 30</td></tr>
+              </tbody></table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h4>⚙️ Fee Configuration</h4></div>
+            <div class="card-body">
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><span>Cadet Registration</span><span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1.2rem">₹300</span></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><span>Junior Registration</span><span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1.2rem">₹400</span></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><span>Senior Registration</span><span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1.2rem">₹500</span></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0"><span>Late Registration Penalty</span><span style="color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:1.2rem">+₹100</span></div>
+              <button class="btn btn-gold btn-sm" style="margin-top:14px;width:100%" onclick="showToast('Mock payment processed!','success')">💳 Process Mock Payment</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </main>
+</div>
+
+<!-- ======================== MODALS ======================== -->
+
+<!-- New Championship Modal -->
+<div class="modal-overlay" id="modal-championship">
+  <div class="modal">
+    <div class="modal-header"><h3>NEW CHAMPIONSHIP</h3><button class="modal-close" onclick="closeModal('modal-championship')">✕</button></div>
+    <div class="modal-body">
+      <div class="steps">
+        <div class="step done"><div class="step-num">✓</div><span style="font-size:0.75rem;font-family:'Rajdhani',sans-serif;color:var(--text2)">Basic Info</span><div class="step-line"></div></div>
+        <div class="step active"><div class="step-num">2</div><span style="font-size:0.75rem;font-family:'Rajdhani',sans-serif;color:var(--gold)">Details</span><div class="step-line"></div></div>
+        <div class="step"><div class="step-num">3</div><span style="font-size:0.75rem;font-family:'Rajdhani',sans-serif;color:var(--text3)">Review</span></div>
+      </div>
+      <div class="form-group"><label>Championship Name</label><input type="text" placeholder="e.g. National Ju-Jitsu Open 2026" value="National Ju-Jitsu Open 2026"></div>
+      <div class="grid-2">
+        <div class="form-group"><label>Federation</label><select><option>Ju-Jitsu Federation</option><option>Wrestling Federation</option><option>MMA Federation</option><option>Grappling India</option></select></div>
+        <div class="form-group"><label>Sport Type</label><select><option>Ju-Jitsu</option><option>Wrestling</option><option>MMA</option><option>Grappling</option><option>Kickboxing</option></select></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label>Start Date</label><input type="date" value="2026-04-01"></div>
+        <div class="form-group"><label>End Date</label><input type="date" value="2026-04-05"></div>
+      </div>
+      <div class="form-group"><label>Venue / Location</label><input type="text" placeholder="Agra Sports Complex, UP" value="Agra Sports Complex, UP"></div>
+      <div class="form-group"><label>Status</label><select><option>Upcoming</option><option>Ongoing</option><option>Completed</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-championship')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveAndClose('modal-championship','Championship created successfully!')">Create Championship</button>
+    </div>
+  </div>
+</div>
+
+<!-- New User Modal -->
+<div class="modal-overlay" id="modal-user">
+  <div class="modal">
+    <div class="modal-header"><h3>ADD USER</h3><button class="modal-close" onclick="closeModal('modal-user')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="Full Name"></div>
+      <div class="form-group"><label>Email Address</label><input type="email" placeholder="user@email.com"></div>
+      <div class="form-group"><label>Role</label><select><option>Administrator</option><option>Federation Head</option><option>Organizer</option><option>Referee</option><option>Coach</option><option>Athlete</option></select></div>
+      <div class="form-group"><label>Assign Federation</label><select><option>All Federations</option><option>Ju-Jitsu Federation</option><option>Wrestling Federation</option><option>MMA Federation</option></select></div>
+      <div class="form-group"><label>Temporary Password</label><input type="password" placeholder="Min 8 characters"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-user')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveAndClose('modal-user','User created and invitation sent!')">Create User</button>
+    </div>
+  </div>
+</div>
+
+<!-- Register Athlete Modal -->
+<div class="modal-overlay" id="modal-athlete">
+  <div class="modal">
+    <div class="modal-header"><h3>REGISTER ATHLETE</h3><button class="modal-close" onclick="closeModal('modal-athlete')">✕</button></div>
+    <div class="modal-body">
+      <div class="alert alert-info" style="font-size:0.8rem">🔍 System will auto-check for duplicates on submission.</div>
+      <div class="form-group"><label>Athlete Full Name</label><input type="text" placeholder="Full legal name"></div>
+      <div class="grid-2">
+        <div class="form-group"><label>Date of Birth</label><input type="date"></div>
+        <div class="form-group"><label>Weight (kg)</label><input type="number" placeholder="65.5"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label>Federation</label><select><option>Ju-Jitsu Federation</option><option>Wrestling Federation</option><option>MMA Federation</option></select></div>
+        <div class="form-group"><label>Experience Level</label><select><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
+      </div>
+      <div class="form-group"><label>Championship</label><select><option>National Ju-Jitsu Open 2026</option><option>State Wrestling Championship</option></select></div>
+      <div class="form-group"><label>Category</label><select><option>U-60 Senior Men</option><option>U-66 Senior Men</option><option>U-52 Junior Women</option><option>U-73 Senior Men</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-athlete')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveAndClose('modal-athlete','Athlete registered and confirmation email sent!')">Register Athlete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Category Modal -->
+<div class="modal-overlay" id="modal-category">
+  <div class="modal">
+    <div class="modal-header"><h3>ADD CATEGORY</h3><button class="modal-close" onclick="closeModal('modal-category')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Category Name</label><input type="text" placeholder="e.g. U-66 Senior Men"></div>
+      <div class="grid-2">
+        <div class="form-group"><label>Age Group</label><select><option>Cadet (13-14)</option><option>Junior (15-17)</option><option>Senior (18-35)</option><option>Masters (35+)</option></select></div>
+        <div class="form-group"><label>Weight Limit (kg)</label><input type="number" placeholder="66"></div>
+      </div>
+      <div class="form-group"><label>Championship</label><select><option>National Ju-Jitsu Open 2026</option><option>State Wrestling Championship</option></select></div>
+      <div class="form-group"><label>Max Athletes</label><input type="number" placeholder="16" value="16"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-category')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveAndClose('modal-category','Category added!')">Add Category</button>
+    </div>
+  </div>
+</div>
+
+<!-- Enter Result Modal -->
+<div class="modal-overlay" id="modal-result">
+  <div class="modal">
+    <div class="modal-header"><h3>ENTER MATCH RESULT</h3><button class="modal-close" onclick="closeModal('modal-result')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Match</label><select><option>#M-007 — Final: Rohit Kumar vs Suresh M.</option><option>#M-006 — 3rd Place Match</option></select></div>
+      <div class="form-group"><label>Winner</label><select><option>Rohit Kumar</option><option>Suresh Malhotra</option></select></div>
+      <div class="grid-2">
+        <div class="form-group"><label>Winner Score</label><input type="number" placeholder="11"></div>
+        <div class="form-group"><label>Loser Score</label><input type="number" placeholder="8"></div>
+      </div>
+      <div class="form-group"><label>Win Method</label><select><option>Points</option><option>Submission</option><option>TKO</option><option>DQ</option><option>Walkover</option></select></div>
+      <div class="form-group"><label>Medal Award</label><select><option>Gold 🥇</option><option>Silver 🥈</option><option>Bronze 🥉</option><option>None</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-result')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveAndClose('modal-result','Result saved and rankings updated!')">Save Result</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Add Referee Modal -->
+<div class="modal-overlay" id="modal-referee">
+  <div class="modal">
+    <div class="modal-header"><h3>ADD REFEREE</h3><button class="modal-close" onclick="closeModal('modal-referee')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="Referee full name"></div>
+      <div class="form-group"><label>Email Address</label><input type="email" placeholder="referee@email.com"></div>
+      <div class="grid-2">
+        <div class="form-group"><label>Grade / Certification</label><select><option>Grade A — National</option><option>Grade B — State</option><option>Grade C — District</option></select></div>
+        <div class="form-group"><label>Sport Specialization</label><select><option>Ju-Jitsu</option><option>Wrestling</option><option>MMA</option><option>Grappling</option><option>Kickboxing</option></select></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label>License Number</label><input type="text" placeholder="REF-2026-XXXX"></div>
+        <div class="form-group"><label>License Expiry</label><input type="date"></div>
+      </div>
+      <div class="form-group"><label>Assign Federation</label><select><option>Ju-Jitsu Federation</option><option>Wrestling Federation</option><option>MMA Federation</option><option>All Federations</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-referee')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveAndClose('modal-referee','Referee added and credentials sent!')">Add Referee</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Coach Modal -->
+<div class="modal-overlay" id="modal-coach">
+  <div class="modal">
+    <div class="modal-header"><h3>ADD COACH</h3><button class="modal-close" onclick="closeModal('modal-coach')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="Coach full name"></div>
+      <div class="form-group"><label>Email Address</label><input type="email" placeholder="coach@email.com"></div>
+      <div class="grid-2">
+        <div class="form-group"><label>Sport Specialization</label><select><option>Ju-Jitsu</option><option>Wrestling</option><option>MMA</option><option>Grappling</option><option>Kickboxing</option></select></div>
+        <div class="form-group"><label>Experience (Years)</label><input type="number" placeholder="5"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label>Coaching License No.</label><input type="text" placeholder="COA-2026-XXXX"></div>
+        <div class="form-group"><label>License Expiry</label><input type="date"></div>
+      </div>
+      <div class="form-group"><label>Assign Federation</label><select><option>Ju-Jitsu Federation</option><option>Wrestling Federation</option><option>MMA Federation</option><option>All Federations</option></select></div>
+      <div class="form-group"><label>Assign Athletes (optional)</label><select><option>Rohit Kumar (#ATH-001)</option><option>Priya Singh (#ATH-002)</option><option>Vikram Thakur (#ATH-003)</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-coach')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveAndClose('modal-coach','Coach added and assigned!')">Add Coach</button>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ LINK JS AT END -->
+<script src="js/app.js"></script>
+</body>
+</html>
